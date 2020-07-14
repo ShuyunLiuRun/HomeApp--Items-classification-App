@@ -1,26 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Table from './Table'
 
-function App() {
+const data = require('./data.json')
+
+function App({items}) {
+  
+  const table = data.map(d => <Table data={d} key={d.ID}/>);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        {table}
+        <p>{items}</p>
     </div>
   );
 }
+// const {render} = ReactDOM;
+
+// const showTable = props =>{
+//   props.data.map((item,i) => React.createElement("tr",{key:i},
+//     Object.keys(item).map((th,j) => React.createElement("th",{key:j},th))
+//   ))
+// }
+
+// render(
+//   showTable(data),
+//   document.getElementById('table')
+// )
 
 export default App;
