@@ -22,23 +22,12 @@ class App extends React.Component{
   }
 
   render(){
-    const {Data} = this.state
+    const Data = this.state
     return(
       <Main Data={Data}/> 
     )
   }
 }
-// const {render} = ReactDOM;
 
-// const showTable = props =>{
-//   props.data.map((item,i) => React.createElement("tr",{key:i},
-//     Object.keys(item).map((th,j) => React.createElement("th",{key:j},th))
-//   ))
-// }
-
-// render(
-//   showTable(data),
-//   document.getElementById('table')
-// )
 
 export default App;
