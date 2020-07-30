@@ -1,5 +1,4 @@
 import React from 'react'
-import OneItem from './Item/OneItem.js'
 import Items from './Items/Items.js'
 
 
