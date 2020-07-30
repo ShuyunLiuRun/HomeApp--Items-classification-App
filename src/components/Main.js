@@ -1,7 +1,7 @@
 import React from 'react'
-import OneItem from './OneItem.js'
+import OneItem from './Item/OneItem.js'
+import Items from './Items/Items.js'
 
-const Items = data.map(d => <OneItem data={d} key={d.ID}/>);
 
 const Main = ({Data}) =>
     <div className="main">
@@ -11,11 +11,11 @@ const Main = ({Data}) =>
         </div>
         <div className="body-contents">
             <div className="list-items">
-                {Items}
+                <Items data={Data}/>
             </div>
             <div className="add-item"></div>
         </div>
         
     </div>
     
-
+export default Main
