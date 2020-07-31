@@ -8,22 +8,21 @@ class App extends React.Component{
     super()
     this.state ={
       items:[],
-      loadingStatus:false
+      isLoading:false
     }
   }
 
   componentDidMount(){
-    this.setState({loadingStatus:true})
+    this.setState({isLoading:true})
     //TODO: Create API carry the data
     //TODO: Fetch the API
     
     //fake data
-    this.setState({items:data,
-                    loadingStatus:true})
+    this.setState({items:data,isLoading:false})
   }
 
   render(){
-    const Data = this.state.items
+    const Data = this.state
     return(
       <React.Fragment>
         <Main Data={Data}/>

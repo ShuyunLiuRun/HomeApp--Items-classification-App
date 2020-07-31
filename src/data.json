@@ -4,20 +4,23 @@
         "name": "厨房",
         "positionID": 0,
         "isContainer": 1,
-        "fields": ""
+        "fields": "",
+        "detailExpanded":false
     },
     {
         "ID": 2,
         "name": "冰箱",
         "positionID": 1,
         "isContainer": 1,
-        "fields": ""
+        "fields": "",
+        "detailExpanded":false
     },
     {
         "ID": 3,
         "name": "牛肉",
         "positionID": 2,
         "isContainer": 0,
-        "fields": "{{\"字段名\"：\"过期时间\", \"字段属性\": \"DateTime\", \"字段值\": \"2020-03-31\"}}"
+        "fields": "{{\"字段名\"：\"过期时间\", \"字段属性\": \"DateTime\", \"字段值\": \"2020-03-31\"}}",
+        "detailExpanded":false
     }
 ]

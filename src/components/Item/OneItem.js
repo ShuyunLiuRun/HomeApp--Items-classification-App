@@ -11,14 +11,13 @@ const OneItem = ({data}) =>{
     )
 }
 
-
 const itemStyle = {
-    height:"60px",
-    width:"60px",
+    width:"80px",
     backgroundColor:"#DCDCDC",
-    padding:"10px",
+    padding:"30px 0",
     margin:"10px",
-    borderRadius:"10px"
+    borderRadius:"10px",
+    textAlign:"center"
 }
 
 export default OneItem
