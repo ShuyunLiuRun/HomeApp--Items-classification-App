@@ -1,9 +1,9 @@
 import React from 'react';
-import GetData from './components/fetch/GetData.js'
 import Main from './components/Main.js'
 
-class App extends React.Component{
+const data = require('./data.json')
 
+class App extends React.Component{
   constructor(){
     super()
     this.state ={
@@ -12,6 +12,15 @@ class App extends React.Component{
     }
   }
 
+  componentDidMount(){
+    this.setState({loadingStatus:true})
+    //TODO: Create API carry the data
+    //TODO: Fetch the API
+    
+    //fake data
+    this.setState({items:data,
+                    loadingStatus:true})
+  }
 
   render(){
     const Data = this.state.items

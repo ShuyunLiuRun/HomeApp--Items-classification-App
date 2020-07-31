@@ -4,9 +4,10 @@
 import React from 'react'
 
 const OneItem = ({data}) =>{
-    const{name,location} = data
+    console.log(data)
+    const name = data.name
     return(
-    <div className="item" style={itemStyle}>{}</div>
+    <div className="item" style={itemStyle}>Name:${name}</div>
     )
 }
 
