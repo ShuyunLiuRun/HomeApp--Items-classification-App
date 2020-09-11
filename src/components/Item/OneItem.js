@@ -10,27 +10,32 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
     margin: 20,
   },
+  button: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
-});
-
-var OneItem = ({data}) =>  {
+var OneItem = ({ data }) => {
   const classes = useStyles();
-  const {name} = data;
+  const { name } = data;
 
   return (
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
-          image={require ("./defaultImage.png")}
-          title={name}
+          height="100"
+          image={require("./defaultImage.png")}
+          title="click to check items"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
@@ -42,12 +47,9 @@ var OneItem = ({data}) =>  {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Add Item
-        </Button>
-        <Button size="small" color="primary">
-          Details
-        </Button>
+        <div className="button">
+        <Button size="small" >Information</Button>
+        </div>
       </CardActions>
     </Card>
   );
