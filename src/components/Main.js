@@ -8,22 +8,34 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardMedia from '@material-ui/core/CardMedia';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    cardRoot: {
+        width: 180,
+        height: 180,
+        margin: '45px 10px 45px 10px',
+    },
+    cardMedia:{
+        height:150,
+        width:150,
+    },
+    headerRoot: {
         flexGrow: 1,
     },
-    menuButton: {
+    headerMenuButton: {
         marginRight: theme.spacing(2),
     },
-    title: {
+    headerTitle: {
         flexGrow: 1,
         display: 'none',
         [theme.breakpoints.up('sm')]: {
             display: 'block',
         },
     },
-    search: {
+    headerSearch: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -37,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
             width: 'auto',
         },
     },
-    searchIcon: {
+    headerSearchIcon: {
         padding: theme.spacing(0, 2),
         height: '100%',
         position: 'absolute',
@@ -46,10 +58,10 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    inputRoot: {
+    headerInputRoot: {
         color: 'inherit',
     },
-    inputInput: {
+    headerInputInput: {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
@@ -66,11 +78,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Main = ({ Data }) => {
     const classes = useStyles();
-
+   
     return (
         <div className="main">
             <div className="header">
-                <div className={classes.root}>
+                <div className={classes.headerRoot}>
                     <AppBar position="static">
                         <Toolbar>
                             <IconButton
@@ -81,18 +93,18 @@ const Main = ({ Data }) => {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Typography className={classes.title} variant="h6" noWrap>
+                            <Typography className={classes.headerTitle} variant="h6" noWrap>
                                 卧室
           </Typography>
-                            <div className={classes.search}>
-                                <div className={classes.searchIcon}>
+                            <div className={classes.headerSearch}>
+                                <div className={classes.headerSearchIcon}>
                                     <SearchIcon />
                                 </div>
                                 <InputBase
                                     placeholder="Search…"
                                     classes={{
-                                        root: classes.inputRoot,
-                                        input: classes.inputInput,
+                                        root: classes.headerInputRoot,
+                                        input: classes.headerInputInput,
                                     }}
                                     inputProps={{ 'aria-label': 'search' }}
                                 />
@@ -104,8 +116,16 @@ const Main = ({ Data }) => {
             <div className="body-contents">
                 <div className="list-items" style={itemsStyle}>
                     <Items data={Data} />
+                    <Card id="add-item" className={classes.cardRoot} variant="outlined">
+                        <CardActions>
+                            <CardMedia
+                                className={classes.cardMedia}
+                                image={require("../img/icon-plus.png")}
+                                title="Add Item"
+                            />
+                        </CardActions>
+                    </Card>
                 </div>
-                <div className="add-item"></div>
             </div>
         </div>
     )
