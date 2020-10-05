@@ -1,19 +1,21 @@
 import React from 'react';
 import Main from './components/Main.js'
 
-const data = require('./data.json')
 
 class App extends React.Component{
   constructor(){
     super()
     this.state ={
       items:[],
-      isLoading:false
+      currentContainer:""
     }
   }
 
+  renderContainer(id){
+    
+  }
+
   componentDidMount(){
-    this.setState({isLoading:true})
     //TODO: Create API carry the data
     //TODO: Fetch the API
     
@@ -25,7 +27,7 @@ class App extends React.Component{
     const Data = this.state
     return(
       <React.Fragment>
-        <Main Data={Data}/>
+        <Main renderContainer={this.renderContainer}/>
       </React.Fragment>
        
     )
