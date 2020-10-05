@@ -1,10 +1,6 @@
 var express = require('express');
 var app = express();
-var fs = require("fs");
-const { get } = require('http');
-const db = require('../mysql/data.js');
-var promises =require('promises');
-var Promise = require('promise');
+const db = require('./mysql/data.js');
 
 app.get('/', async (req, res) =>{
     db.query('select * from master where contained_by = 0', [],function(result,fields){
