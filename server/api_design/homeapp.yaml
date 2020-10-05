@@ -94,11 +94,11 @@ paths:
                       type: string
                       example: 家
                     ContainedBy:
-                      type: int32
+                      type: integer
                       example: 0
                       description: 该对象被包含在xxx id
                     IsContainer:
-                      type: bit
+                      type: boolean
                       example: 1
                       description: 该对象能否包含其他对象
                     Level:
