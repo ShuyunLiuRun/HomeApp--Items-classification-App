@@ -18,7 +18,7 @@ class App extends React.Component{
   //once the user click on an item(container), 
   //fetch new data for this item(container)
   clickOnItem(currentContainerId){
-    console.log("hello")
+    console.log(currentContainerId)
   }
 
   //user click add item, jump to a form

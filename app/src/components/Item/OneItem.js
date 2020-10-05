@@ -34,7 +34,7 @@ var OneItem = ({ data, clickOnItem }) => {
   return (
     <Card className={classes.root}>
       {/* TODO:  pass all attribute back to root class, then setState*/}
-      <div className="handle-clickItem" onClick={({name}) =>this.clickOnItem()}>
+      <div className="handle-clickItem" onClick={(name) =>clickOnItem()}>
       <CardActionArea>
         <CardMedia
           component="img"
