@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Main = ({ Data }) => {
+const Main = ({ Data ,clickOnItem}) => {
     const classes = useStyles();
    
     return (
@@ -115,7 +115,7 @@ const Main = ({ Data }) => {
             </div>
             <div className="body-contents">
                 <div className="list-items" style={itemsStyle}>
-                    <Items data={Data} />
+                    <Items data={Data} clickOnItem={clickOnItem}/>
                     <Card id="add-item" className={classes.cardRoot} variant="outlined">
                         <CardActions>
                             <CardMedia

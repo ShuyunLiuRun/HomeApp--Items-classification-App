@@ -1,10 +1,10 @@
 import React from 'react'
-import OneItem from '../Item/OneItem'
+import OneItem from '../Item/OneItem.js'
 
-const Items = ({data}) => {
-    const {items,isLoading} = data;
+const Items = ({data, clickOnItem}) => {
+    const {items} = data;
     return (
-        isLoading ? <div>Loading</div> : items.map(d => <OneItem data={d} key={d.ID}/>) 
+        items.map(d => <OneItem data={d} key={d.ID} clickOnItem={clickOnItem}/>) 
     )
 }
 
