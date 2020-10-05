@@ -1,12 +1,8 @@
 var express = require('express');
 var app = express();
-var fs = require("fs");
-const { get } = require('http');
-const db = require('../mysql/data.js');
-var promises =require('promises');
-var Promise = require('promise');
+const db = require('./mysql/data.js');
 
-app.get('/listUsers', async (req, res) =>{
+app.get('/master', async (req, res) =>{
     db.query('select * from master', [],function(result,fields){
         console.log('查询结果：');
         console.log(result);

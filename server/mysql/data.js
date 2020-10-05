@@ -1,4 +1,3 @@
-const { MyLocationOutlined } = require('@material-ui/icons');
 var mysql = require('mysql');
 
 var databaseConfig = {
