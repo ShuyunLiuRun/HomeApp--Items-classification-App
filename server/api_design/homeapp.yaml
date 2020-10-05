@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: HomeApp
+  description: Home app web api design
+  version: 0.0.1
+servers:
+  - url: localhost:7000
+    description: Dev env for this api
+paths:
+  /master:
+    get:
+      summary: Returns a list of master objects
+      description: all rows from master
+      tags:
+        - master
+      responses:
+        '200':    # status code
+          description: A JSON array of master objects
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    Id: 
+                      type: integer
+                      format: int32
+                      example: 1
+                    Name:
+                      type: string
+                      example: 家
+                    ContainedBy:
+                      type: integer
+                      example: 0
+                      description: 该对象被包含在xxx id
+                    IsContainer:
+                      type: boolean
+                      example: 1
+                      description: 该对象能否包含其他对象
+                    Level:
+                      type: integer
+                      format: int32
+                      example: 0
+                      description: 该对象的层级数
+                    AdditionalJson:
+                      type: string
+                      format: json
+                      description: json格式的额外字段      
+    post:
+      summary: Create a new master object
+      description: create a new master object
+      tags:
+        - master
+      responses:
+        '200':
+          description: Successfully created a new master object      
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"   
+  /master/{id}:
+    get:
+      summary: Returns a single master object
+      description: single row from master
+      tags:
+        - master
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: master object id
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: A JSON object of a single master object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    Id: 
+                      type: integer
+                      format: int32
+                      example: 1
+                    Name:
+                      type: string
+                      example: 家
+                    ContainedBy:
+                      type: int32
+                      example: 0
+                      description: 该对象被包含在xxx id
+                    IsContainer:
+                      type: bit
+                      example: 1
+                      description: 该对象能否包含其他对象
+                    Level:
+                      type: integer
+                      format: int32
+                      example: 0
+                      description: 该对象的层级数
+                    AdditionalJson:
+                      type: string
+                      format: json
+                      description: json格式的额外字段
+    
+
+          
