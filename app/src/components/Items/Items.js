@@ -1,10 +1,10 @@
 import React from 'react'
 import OneItem from '../Item/OneItem.js'
 
-const Items = ({data, clickOnItem=f=>f}) => {
-    const {items} = data;
+const Items = ({data, clickOnItem}) => {
+    
     return (
-        items.map(d => <OneItem data={d} key={d.ID} clickOnItem={clickOnItem}/>) 
+        data.map(d => <OneItem data={d} key={d.ID} clickOnItem={clickOnItem}/>) 
     )
 }
 

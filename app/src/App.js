@@ -1,56 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Main from './components/Main.js'
+//fake data
+const fd = require('./data.json');
 
-const data = require('./data.json');
 
-
-class App extends React.Component{
-  constructor(){
-    super()
-    this.state ={
-      items:[],
-      currentContainer:""
-    }
-
-    this.clickOnItem = this.clickOnItem.bind(this);
-  }
+function App() {
+  const [data, setData] = useState(fd);
+  const [currentContainer, setCurrentContainer] = useState(' ');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   //once the user click on an item(container), 
   //fetch new data for this item(container)
-  clickOnItem(currentContainerId){
-    console.log(currentContainerId)
-  }
+  const clickOnItem = async (name, ID, level, contained_by, additional_json) => {
+    console.log(name + ID);
+    setError(null);
+    setIsLoading(true);
+    setCurrentContainer(name);
 
-  //user click add item, jump to a form
-  clickAddItem(){
-
-  }
-
-  //pass new item attributes to API
-  addItem(){
-
-  }
-
-  componentDidMount(){
-    this.setState({isLoading:true});
-    //TODO: Create API carry the data
-    //TODO: Fetch the API
-    
-    //fake data
-    this.setState({items:data,isLoading:false});
-
+    try {
+      fetch(`http://localhost:4000/${ID}`, {
+        mode: 'no-cors',
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+        .then(res => {
+          console.log(JSON.stringify(res));
+          setData(JSON.stringify(res));
+        });
+      setIsLoading(false);
+    } catch (e) {
+      setError(e);
+      setIsLoading(false);
+    };
   };
 
-  render(){
-    const Data = this.state
-    return(
-      <React.Fragment>
-        <Main Data = {Data} clickOnItem={this.clickOnItem}/>
-      </React.Fragment>
-       
-    )
-  }
+
+  //user click add item, jump to a form
+  // addItemForm() {
+
+  // }
+
+  //pass new item attributes to API
+  // addItem() {
+
+  // }
+
+  //back to upper level
+  // goBack() {
+
+  // }
+
+  // componentDidMount() {
+  //   this.setState({ isLoading: true });
+  //   //TODO: Create API carry the data
+  //   //TODO: Fetch the API
+
+  //   //fake data
+  //   this.setState({ items: data, isLoading: false });
+
+  // };
+
+  return (
+    <React.Fragment>
+      <Main Data={data} clickOnItem={clickOnItem} />
+    </React.Fragment>
+
+  )
 }
+
 
 
 export default App;

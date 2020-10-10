@@ -3,12 +3,18 @@ var app = express();
 const db = require('./mysql/data.js');
 
 app.get('/', async (req, res) =>{
+    console.log(req.body);
     db.query('select * from master where contained_by = 0', [],function(result,fields){
         console.log('查询结果：');
         console.log(result);
 
-        res.end( );
+        res.end( JSON.stringify(result));
     });
+});
+
+app.get('/:id',function(req,res){
+    var id = req.params.id;
+    res.send(id);
 });
 
 app.post('/addItem', function (req, res) {
@@ -33,7 +39,7 @@ app.post('/addItem', function (req, res) {
     });
  });
 
-var server = app.listen(3000, function () {
+var server = app.listen(4000, function () {
    var host = server.address().address
    var port = server.address().port
    console.log("Example app listening at http://%s:%s", host, port)

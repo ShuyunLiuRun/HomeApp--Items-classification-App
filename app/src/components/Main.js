@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Main = ({ Data ,clickOnItem=f=>f}) => {
+const Main = ({ Data ,clickOnItem }) => {
     const classes = useStyles();
    
     return (

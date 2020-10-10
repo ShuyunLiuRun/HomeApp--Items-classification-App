@@ -23,18 +23,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-var OneItem = ({ data, clickOnItem=f=>f }) => {
+var OneItem = ({ data, clickOnItem }) => {
   const classes = useStyles();
   //fake data
-  const { name, ID } = data;
+  const { item_name, item_id, level, contained_by, additional_json } = data;
   //database data
-  //const {item_id, item_name, level, additional_json} = data;
+  //const {item_id, item_name, level, contained_by, additional_json} = data;
 
 
   return (
     <Card className={classes.root}>
       {/* TODO:  pass all attribute back to root class, then setState*/}
-      <div className="handle-clickItem" onClick={() => clickOnItem(`${name}${ID}`)}>
+      <div className="handle-clickItem" onClick={() => clickOnItem(item_name, item_id, level, contained_by, additional_json)}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -44,7 +44,7 @@ var OneItem = ({ data, clickOnItem=f=>f }) => {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {name}
+            {item_name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {/* Descriptions  */}
