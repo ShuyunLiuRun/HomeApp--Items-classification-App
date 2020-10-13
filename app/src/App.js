@@ -27,7 +27,8 @@ function App() {
         }
       })
         .then(res => res.json())
-        .then(res => console.log("fetch: "+res));
+        .then(res => setData(res));
+      console.log(data);
       setIsLoading(false);
     } catch (e) {
       setError(e);
@@ -63,7 +64,7 @@ function App() {
 
   return (
     <React.Fragment>
-      <Main Data={data} clickOnItem={clickOnItem} />
+      <Main Data={data} clickOnItem={clickOnItem} currentContainer={currentContainer}/>
     </React.Fragment>
 
   )

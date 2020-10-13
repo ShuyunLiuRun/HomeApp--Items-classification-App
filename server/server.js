@@ -20,14 +20,12 @@ app.get('/', async (req, res, next) =>{
 
 app.get('/:id',function(req,res, next){
     var id = req.params.id;
-    // db.query(`select * from master where contained_by = ${id}`, [],function(result,fields){
-    //     console.log('查询结果：');
-    //     console.log(result);
+    db.query(`select * from master where contained_by = ${id}`, [],function(result,fields){
+        console.log('查询结果：');
+        console.log(result);
 
-    //     res.end( JSON.stringify(result));
-    // });
-
-    res.end(id);
+        res.end( JSON.stringify(result));
+    });
 });
 
 app.post('/addItem', function (req, res) {

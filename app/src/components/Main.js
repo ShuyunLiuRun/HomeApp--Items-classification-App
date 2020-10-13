@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Main = ({ Data ,clickOnItem }) => {
+const Main = ({ Data ,clickOnItem ,currentContainer}) => {
     const classes = useStyles();
    
     return (
@@ -94,7 +94,7 @@ const Main = ({ Data ,clickOnItem }) => {
                                 <MenuIcon />
                             </IconButton>
                             <Typography className={classes.headerTitle} variant="h6" noWrap>
-                                卧室
+                                {currentContainer}
           </Typography>
                             <div className={classes.headerSearch}>
                                 <div className={classes.headerSearchIcon}>
