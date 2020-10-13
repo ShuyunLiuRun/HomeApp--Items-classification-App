@@ -26,10 +26,8 @@ function App() {
           'content-type': 'application/json'
         }
       })
-        .then(res => {
-          console.log("front end fetch get: "+res);
-          //setData(JSON.stringify(res));
-        });
+        .then(res => res.json())
+        .then(res => console.log("fetch: "+res));
       setIsLoading(false);
     } catch (e) {
       setError(e);
