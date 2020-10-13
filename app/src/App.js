@@ -20,15 +20,15 @@ function App() {
 
     try {
       fetch(`http://localhost:4000/${ID}`, {
-        mode: 'no-cors',
+        mode: 'cors',
         method: 'GET',
         headers: {
           'content-type': 'application/json'
         }
       })
         .then(res => {
-          console.log(JSON.stringify(res));
-          setData(JSON.stringify(res));
+          console.log("front end fetch get: "+res);
+          //setData(JSON.stringify(res));
         });
       setIsLoading(false);
     } catch (e) {

@@ -2,7 +2,13 @@ var express = require('express');
 var app = express();
 const db = require('./mysql/data.js');
 
-app.get('/', async (req, res) =>{
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
+app.get('/', async (req, res, next) =>{
     console.log(req.body);
     db.query('select * from master where contained_by = 0', [],function(result,fields){
         console.log('查询结果：');
@@ -12,9 +18,16 @@ app.get('/', async (req, res) =>{
     });
 });
 
-app.get('/:id',function(req,res){
+app.get('/:id',function(req,res, next){
     var id = req.params.id;
-    res.send(id);
+    // db.query(`select * from master where contained_by = ${id}`, [],function(result,fields){
+    //     console.log('查询结果：');
+    //     console.log(result);
+
+    //     res.end( JSON.stringify(result));
+    // });
+
+    res.end(id);
 });
 
 app.post('/addItem', function (req, res) {
