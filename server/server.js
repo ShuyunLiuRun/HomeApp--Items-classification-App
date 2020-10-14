@@ -3,6 +3,7 @@ var app = express();
 const db = require('./mysql/data.js');
 
 app.use(function(req, res, next) {
+    //add a header message to solve cors security policy access deny problem
     res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -29,7 +30,6 @@ app.get('/:id',function(req,res, next){
 });
 
 app.post('/addItem', function (req, res) {
-    // 读取已存在的数据
     db.query('select * from master', [],function(result,fields){
         var toAdd = req.body;
         console.log('查询结果：');
@@ -40,7 +40,6 @@ app.post('/addItem', function (req, res) {
  });
 
  app.post('/container', function (req, res) {
-    // 读取已存在的数据
     db.query('select * from master', [],function(result,fields){
         var toAdd = req.body;
         console.log('查询结果：');

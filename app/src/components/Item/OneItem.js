@@ -1,6 +1,3 @@
-// each item is wrapped in a litte square container,
-// TODO: set the css in this file(containers' size, background color...)
-// TODO: Show the item's name in the suqare
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -22,18 +19,16 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
+// each item is wrapped in a litte square container
 var OneItem = ({ data, clickOnItem }) => {
   const classes = useStyles();
-  //fake data
   const { item_name, item_id, level, contained_by, additional_json } = data;
-  //database data
-  //const {item_id, item_name, level, contained_by, additional_json} = data;
+
 
 
   return (
     <Card className={classes.root}>
-      {/* TODO:  pass all attribute back to root class, then setState*/}
+      {/* pass all attribute back to root, then setState*/}
       <div className="handle-clickItem" onClick={() => clickOnItem(item_name, item_id, level, contained_by, additional_json)}>
       <CardActionArea>
         <CardMedia

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Main from './components/Main.js'
+import * as Fetch from './components/DataComponent.js'
 //fake data
 const fd = require('./data.json');
 
@@ -8,63 +9,53 @@ function App() {
   const [data, setData] = useState(fd);
   const [currentContainer, setCurrentContainer] = useState(' ');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
 
   //once the user click on an item(container), 
-  //fetch new data for this item(container)
+  //get all the items stored in this item(container)
   const clickOnItem = async (name, ID, level, contained_by, additional_json) => {
     console.log(name + ID);
-    setError(null);
     setIsLoading(true);
     setCurrentContainer(name);
 
-    try {
-      fetch(`http://localhost:4000/${ID}`, {
-        mode: 'cors',
-        method: 'GET',
-        headers: {
-          'content-type': 'application/json'
-        }
-      })
-        .then(res => res.json())
-        .then(res => setData(res));
-      console.log(data);
-      setIsLoading(false);
-    } catch (e) {
-      setError(e);
-      setIsLoading(false);
-    };
+    var baseUrl = "http://localhost:4000/";
+    let url = baseUrl + ID;
+
+    Fetch.get(url).then((response) => {
+      if (response) {
+        // no error occurred
+        setData(response);
+        console.log(data);
+        setIsLoading(false);
+      }
+    });
   };
 
 
-  //user click add item, jump to a form
-  // addItemForm() {
+  //TODO: user click add item, jump to a form
+  const addItemForm = () => {
 
-  // }
+  }
 
-  //pass new item attributes to API
+  //TODO: post new item to database
   // addItem() {
 
   // }
 
-  //back to upper level
+  //TODO: back to upper level
+  //(someone says there is a windows method to jump back)
   // goBack() {
 
   // }
 
-  // componentDidMount() {
-  //   this.setState({ isLoading: true });
-  //   //TODO: Create API carry the data
-  //   //TODO: Fetch the API
+  //TODO: home button click to go to the first level
 
-  //   //fake data
-  //   this.setState({ items: data, isLoading: false });
+  //TODO: search for item
 
-  // };
+
 
   return (
     <React.Fragment>
-      <Main Data={data} clickOnItem={clickOnItem} currentContainer={currentContainer}/>
+      <Main Data={data} clickOnItem={clickOnItem} currentContainer={currentContainer} />
     </React.Fragment>
 
   )
