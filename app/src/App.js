@@ -6,9 +6,17 @@ const fd = require('./data.json');
 
 
 function App() {
-  const [data, setData] = useState(fd);
+  const [data, setData] = useState();
   const [currentContainer, setCurrentContainer] = useState(' ');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // the initial interface
+  Fetch.get("http://localhost:4000/").then((res)=>{
+    if(res){
+      setData(res);
+      setIsLoading(false);
+    }
+  });
 
   //once the user click on an item(container), 
   //get all the items stored in this item(container)
@@ -55,7 +63,7 @@ function App() {
 
   return (
     <React.Fragment>
-      <Main Data={data} clickOnItem={clickOnItem} currentContainer={currentContainer} />
+      <Main Data={data} clickOnItem={clickOnItem} currentContainer={currentContainer} isLoading={isLoading}/>
     </React.Fragment>
 
   )
