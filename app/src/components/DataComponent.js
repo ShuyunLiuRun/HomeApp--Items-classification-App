@@ -23,7 +23,7 @@ const request = (url, config) => {
             return resJson;
         }
     }).catch((error) => {
-        message.error('try to sign in again');
+        message.error(error);
     });
 };
 
