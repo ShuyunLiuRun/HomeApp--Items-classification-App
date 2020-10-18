@@ -9,10 +9,10 @@ const fd = require('./data.json');
 
 function App() {
   const [data, setData] = useState(fd);
-  const [currentContainer, setCurrentContainer] = useState(' ');
+  const [containerLabel, setContainerLabel] = useState(' ');
   const [isLoading, setIsLoading] = useState(true);
   const [init, setInit] = useState(true);
-  const [currentContainerId, setCurrentContainerId] = useState();
+  const [currentContainerId, setCurrentContainerId] = useState(0);
 
   //the initial data
   if(init === true){
@@ -32,7 +32,7 @@ function App() {
   const clickOnItem = async (name, ID, level, contained_by, additional_json) => {
     console.log(name + ID);
     setIsLoading(true);
-    setCurrentContainer(name);
+    setContainerLabel(name);
 
     var baseUrl = "http://localhost:4000/";
     let url = baseUrl + ID;
@@ -86,7 +86,7 @@ function App() {
   return (
     <React.Fragment>
 
-      <Main Data={data} clickOnItem={clickOnItem} currentContainer={currentContainer} isLoading={isLoading} />
+      <Main Data={data} clickOnItem={clickOnItem} currentContainer={containerLabel} isLoading={isLoading} />
     </React.Fragment>
 
   )

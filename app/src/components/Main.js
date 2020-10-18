@@ -12,6 +12,8 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {  Link, BrowserRouter as Router} from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
     progressRoot: {
@@ -128,15 +130,19 @@ const Main = ({ Data, clickOnItem, currentContainer, isLoading }) => {
                 <div className="body-contents">
                     <div className="list-items" style={itemsStyle}>
                         <Items data={Data} clickOnItem={clickOnItem} />
-                        <Card id="add-item" className={classes.cardRoot} variant="outlined">
-                            <CardActions>
-                                <CardMedia
-                                    className={classes.cardMedia}
-                                    image={require("../img/icon-plus.png")}
-                                    title="Add Item"
-                                />
-                            </CardActions>
-                        </Card>
+                        <Router>
+                            <Link to="/form">
+                                <Card id="add-item" className={classes.cardRoot} variant="outlined">
+                                    <CardActions>
+                                        <CardMedia
+                                            className={classes.cardMedia}
+                                            image={require("../img/icon-plus.png")}
+                                            title="Add Item"
+                                        />
+                                    </CardActions>
+                                </Card>
+                            </Link>
+                        </Router>
                     </div>
                 </div>
             </div>
