@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Main from './components/Main.js'
-import * as Fetch from './components/DataComponent.js'
+import Main from './components/Main.js';
+import * as Fetch from './components/DataComponent.js';
+
 //fake data
 const fd = require('./data.json');
 
@@ -9,15 +10,20 @@ const fd = require('./data.json');
 function App() {
   const [data, setData] = useState(fd);
   const [currentContainer, setCurrentContainer] = useState(' ');
-  const [isLoading, setIsLoading] = useState(false);
-  const [init, setInit] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  const [init, setInit] = useState(true);
+  const [currentContainerId, setCurrentContainerId] = useState();
 
   //the initial data
-  if(init == true){
+  if(init === true){
     Fetch.get("http://localhost:4000/").then((res) => {
+      setIsLoading(false);
       setData(res);
-      //'init' is a trigger to prevent the program from jump into a fetch loop
+      //'init' is a trigger to prevent the program from jumping into a fetch loop
       setInit(false);
+    }).catch((error)=>  {
+      alert(error);
+      setInit(false)
     });
   }
 
@@ -35,7 +41,6 @@ function App() {
       if (response) {
         // no error occurred
         setData(response);
-        console.log(data);
         setIsLoading(false);
       }
     });
@@ -43,14 +48,28 @@ function App() {
 
 
   //TODO: user click add item, jump to a form
-  const addItemForm = () => {
-
-  }
-
-  //TODO: post new item to database
-  // addItem() {
+  // const addItemForm = () => {
 
   // }
+
+  //TODO: post new item to database
+  // const addItem = async (name, ID, level, contained_by, additional_json) => {
+  //   //console.log(name + ID);
+  //   setIsLoading(true);
+  //   setCurrentContainer(name);
+
+  //   var baseUrl = "http://localhost:4000/";
+  //   let url = baseUrl + ID;
+
+  //   Fetch.get(url).then((response) => {
+  //     if (response) {
+  //       // no error occurred
+  //       setData(response);
+  //       console.log(data);
+  //       setIsLoading(false);
+  //     }
+  //   });
+  // };
 
   //TODO: back to upper level
   //(someone says there is a windows method to jump back)
@@ -66,11 +85,14 @@ function App() {
 
   return (
     <React.Fragment>
+
       <Main Data={data} clickOnItem={clickOnItem} currentContainer={currentContainer} isLoading={isLoading} />
     </React.Fragment>
 
   )
 }
+
+
 
 
 
