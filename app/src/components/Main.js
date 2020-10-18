@@ -11,16 +11,23 @@ import SearchIcon from '@material-ui/icons/Search';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
+    progressRoot: {
+        display: 'flex',
+        '& > * + *': {
+            marginLeft: theme.spacing(2),
+        },
+    },
     cardRoot: {
         width: 180,
         height: 180,
         margin: '45px 10px 45px 10px',
     },
-    cardMedia:{
-        height:150,
-        width:150,
+    cardMedia: {
+        height: 150,
+        width: 150,
     },
     headerRoot: {
         flexGrow: 1,
@@ -76,58 +83,63 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Main = ({ Data }) => {
+const Main = ({ Data, clickOnItem, currentContainer, isLoading }) => {
     const classes = useStyles();
-   
+
     return (
-        <div className="main">
-            <div className="header">
-                <div className={classes.headerRoot}>
-                    <AppBar position="static">
-                        <Toolbar>
-                            <IconButton
-                                edge="start"
-                                className={classes.menuButton}
-                                color="inherit"
-                                aria-label="open drawer"
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography className={classes.headerTitle} variant="h6" noWrap>
-                                卧室
-          </Typography>
-                            <div className={classes.headerSearch}>
-                                <div className={classes.headerSearchIcon}>
-                                    <SearchIcon />
+        isLoading ?
+            <div className={classes.progressRoot}>
+                <CircularProgress />
+                {/* <CircularProgress color="secondary" /> */}
+            </div> :
+            <div className="main">
+                <div className="header">
+                    <div className={classes.headerRoot}>
+                        <AppBar position="static">
+                            <Toolbar>
+                                <IconButton
+                                    edge="start"
+                                    className={classes.menuButton}
+                                    color="inherit"
+                                    aria-label="open drawer"
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                                <Typography className={classes.headerTitle} variant="h6" noWrap>
+                                    {currentContainer}
+                                </Typography>
+                                <div className={classes.headerSearch}>
+                                    <div className={classes.headerSearchIcon}>
+                                        <SearchIcon />
+                                    </div>
+                                    <InputBase
+                                        placeholder="Search…"
+                                        classes={{
+                                            root: classes.headerInputRoot,
+                                            input: classes.headerInputInput,
+                                        }}
+                                        inputProps={{ 'aria-label': 'search' }}
+                                    />
                                 </div>
-                                <InputBase
-                                    placeholder="Search…"
-                                    classes={{
-                                        root: classes.headerInputRoot,
-                                        input: classes.headerInputInput,
-                                    }}
-                                    inputProps={{ 'aria-label': 'search' }}
+                            </Toolbar>
+                        </AppBar>
+                    </div>
+                </div>
+                <div className="body-contents">
+                    <div className="list-items" style={itemsStyle}>
+                        <Items data={Data} clickOnItem={clickOnItem} />
+                        <Card id="add-item" className={classes.cardRoot} variant="outlined">
+                            <CardActions>
+                                <CardMedia
+                                    className={classes.cardMedia}
+                                    image={require("../img/icon-plus.png")}
+                                    title="Add Item"
                                 />
-                            </div>
-                        </Toolbar>
-                    </AppBar>
+                            </CardActions>
+                        </Card>
+                    </div>
                 </div>
             </div>
-            <div className="body-contents">
-                <div className="list-items" style={itemsStyle}>
-                    <Items data={Data} />
-                    <Card id="add-item" className={classes.cardRoot} variant="outlined">
-                        <CardActions>
-                            <CardMedia
-                                className={classes.cardMedia}
-                                image={require("../img/icon-plus.png")}
-                                title="Add Item"
-                            />
-                        </CardActions>
-                    </Card>
-                </div>
-            </div>
-        </div>
     )
 
 

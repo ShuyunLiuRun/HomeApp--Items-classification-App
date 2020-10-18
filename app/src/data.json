@@ -1,28 +1,23 @@
 [
     {
-        "ID": 1,
-        "name": "书桌",
-        "positionID": 0,
-        "isContainer": 1,
-        "fields": "",
-        "detailExpanded":false
+        "item_id": 2,
+        "item_name": "Desk",
+        "level": "level",
+        "contained_by": "1",
+        "additional_json": null
     },
     {
-        "ID": 2,
-        "name": "床头柜",
-        "positionID": 1,
-        "isContainer": 1,
-        "fields": "",
-        "detailExpanded":false
+        "item_id": 3,
+        "item_name": "Nightstand",
+        "level": "level",
+        "contained_by": "1",
+        "additional_json": null
     },
     {
-        "ID": 3,
-        "name": "衣柜",
-        "positionID": 2,
-        "isContainer": 0,
-        "fields": "{{\"字段名\"：\"过期时间\", \"字段属性\": \"DateTime\", \"字段值\": \"2020-03-31\"}}",
-        "detailExpanded":false
+        "item_id": 4,
+        "item_name": "Cupboard",
+        "level": "level",
+        "contained_by": "1",
+        "additional_json": "{{\"字段名\"：\"过期时间\", \"字段属性\": \"DateTime\", \"字段值\": \"2020-03-31\"}}"
     }
 ]
-
-

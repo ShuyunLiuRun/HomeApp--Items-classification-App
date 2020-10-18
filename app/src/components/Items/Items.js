@@ -1,10 +1,12 @@
 import React from 'react'
-import OneItem from '../Item/OneItem'
+import OneItem from '../Item/OneItem.js'
 
-const Items = ({data}) => {
-    const {items,isLoading} = data;
+const Items = ({data, clickOnItem}) => {
+    
     return (
-        isLoading ? <div>Loading</div> : items.map(d => <OneItem data={d} key={d.ID}/>) 
+        data === null || data === undefined || data === '' ?
+        <div>You haven't record have any item in your place yet. Please click the Plus icon to add a item in your home.</div> :
+        data.map(d => <OneItem data={d} key={d.ID} clickOnItem={clickOnItem}/>) 
     )
 }
 
