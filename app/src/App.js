@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Main from './components/Main.js';
 import * as Fetch from './components/DataComponent.js';
+import AddItemForm from './components/Item/AddItemForm.js';
+import { BrowserRouter as Router, Route , Switch } from "react-router-dom";
 
 //fake data
 const fd = require('./data.json');
@@ -15,13 +17,13 @@ function App() {
   const [currentContainerId, setCurrentContainerId] = useState(0);
 
   //the initial data
-  if(init === true){
+  if (init === true) {
     Fetch.get("http://localhost:4000/").then((res) => {
       setIsLoading(false);
       setData(res);
       //'init' is a trigger to prevent the program from jumping into a fetch loop
       setInit(false);
-    }).catch((error)=>  {
+    }).catch((error) => {
       alert(error);
       setInit(false)
     });
@@ -46,14 +48,8 @@ function App() {
     });
   };
 
-
-  //TODO: user click add item, jump to a form
-  // const addItemForm = () => {
-
-  // }
-
-  //TODO: post new item to database
-  // const addItem = async (name, ID, level, contained_by, additional_json) => {
+  // collect new added item information and post the data into database
+  // const submitItem = async (name, ID,  additional_json) => {
   //   //console.log(name + ID);
   //   setIsLoading(true);
   //   setCurrentContainer(name);
@@ -69,6 +65,8 @@ function App() {
   //       setIsLoading(false);
   //     }
   //   });
+
+  //   //shou up a alert, then go back to homepage
   // };
 
   //TODO: back to upper level
@@ -86,7 +84,18 @@ function App() {
   return (
     <React.Fragment>
 
-      <Main Data={data} clickOnItem={clickOnItem} currentContainer={containerLabel} isLoading={isLoading} />
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Main Data={data} clickOnItem={clickOnItem} currentContainer={containerLabel} isLoading={isLoading} />
+          </Route>
+          <Route path="/form">
+            <AddItemForm />
+          </Route>
+        </Switch>
+      </Router>
+
+
     </React.Fragment>
 
   )

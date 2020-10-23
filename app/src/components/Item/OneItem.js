@@ -32,8 +32,6 @@ var OneItem = ({ data, clickOnItem }) => {
       {/* pass all attribute back to root, then setState*/}
       <div className="handle-clickItem" onClick={() => clickOnItem(item_name, item_id, level, contained_by, additional_json)}>
       
-      <Router>
-        <Link to={`/${item_id}`}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -50,8 +48,6 @@ var OneItem = ({ data, clickOnItem }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      </Link>
-      </Router>
 
       </div>
       <CardActions>
