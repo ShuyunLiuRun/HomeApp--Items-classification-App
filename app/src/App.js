@@ -15,6 +15,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [init, setInit] = useState(true);
   const [currentContainerId, setCurrentContainerId] = useState(0);
+  const [newItem, setNewItem] = useState();
 
   //the initial data
   if (init === true) {
@@ -31,10 +32,11 @@ function App() {
 
   //once the user click on an item(container), 
   //get all the items stored in this item(container)
-  const clickOnItem = async (name, ID, level, contained_by, additional_json) => {
+  const clickOnItem = async (name, ID, level, contained_by, additional_json, is_container) => {
     console.log(name + ID);
     setIsLoading(true);
     setContainerLabel(name);
+    setCurrentContainerId(ID);
 
     var baseUrl = "http://localhost:4000/";
     let url = baseUrl + ID;
@@ -48,26 +50,29 @@ function App() {
     });
   };
 
-  // collect new added item information and post the data into database
-  // const submitItem = async (name, ID,  additional_json) => {
-  //   //console.log(name + ID);
-  //   setIsLoading(true);
-  //   setCurrentContainer(name);
+  const handleFormSubmit = (data) => {
+    console.log("new item: "+ data);
+  };
 
-  //   var baseUrl = "http://localhost:4000/";
-  //   let url = baseUrl + ID;
+  // post the new item into database
+  const submitItem = async (name, ID,  additional_json) => {
+    //console.log(name + ID);
+    setIsLoading(true);
 
-  //   Fetch.get(url).then((response) => {
-  //     if (response) {
-  //       // no error occurred
-  //       setData(response);
-  //       console.log(data);
-  //       setIsLoading(false);
-  //     }
-  //   });
+    var baseUrl = "http://localhost:4000/";
+    let url = baseUrl + ID;
 
-  //   //shou up a alert, then go back to homepage
-  // };
+    Fetch.get(url).then((response) => {
+      if (response) {
+        // no error occurred
+        setData(response);
+        console.log(data);
+        setIsLoading(false);
+      }
+    });
+
+    //shou up a alert, then go back to homepage
+  };
 
   //TODO: back to upper level
   //(someone says there is a windows method to jump back)
@@ -90,7 +95,8 @@ function App() {
             <Main Data={data} clickOnItem={clickOnItem} currentContainer={containerLabel} isLoading={isLoading} />
           </Route>
           <Route path="/form">
-            <AddItemForm />
+            {/* use props to pass data */}
+            <AddItemForm currentContainerId={currentContainerId} handleFormSubmit={handleFormSubmit}/>
           </Route>
         </Switch>
       </Router>
@@ -106,3 +112,4 @@ function App() {
 
 
 export default App;
+
