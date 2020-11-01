@@ -16,6 +16,8 @@ function App() {
   const [init, setInit] = useState(true);
   const [currentContainerId, setCurrentContainerId] = useState(0);
   const [newItem, setNewItem] = useState();
+  //可能不需要level字段？
+  //const [currentLevel, setCurrentLevel] = useState(1);
 
   //the initial data
   if (init === true) {
@@ -50,8 +52,13 @@ function App() {
     });
   };
 
-  const handleFormSubmit = (data) => {
-    console.log("new item: "+ data);
+  //Collect new item's data from the form 
+  //item_name, item_id, level, contained_by, additional_json , is_container
+  const handleFormSubmit = (dataFromForm) => {
+    dataFromForm["contained_by"] = currentContainerId;
+    var jsonD = JSON.stringify(dataFromForm);
+    console.log("new item: "+ jsonD);
+    
   };
 
   // post the new item into database

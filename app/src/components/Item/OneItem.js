@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 // each item is wrapped in a litte square container
 var OneItem = ({ data, clickOnItem }) => {
   const classes = useStyles();
-  const { item_name, item_id, level, contained_by, additional_json } = data;
+  const { item_name, item_id, level, contained_by, additional_json , is_container} = data;
 
 
 
@@ -30,7 +30,7 @@ var OneItem = ({ data, clickOnItem }) => {
 
     <Card className={classes.root}>
       {/* pass all attribute back to root, then setState*/}
-      <div className="handle-clickItem" onClick={() => clickOnItem(item_name, item_id, level, contained_by, additional_json)}>
+      <div className="handle-clickItem" onClick={() => clickOnItem(item_name, item_id, level, contained_by, additional_json , is_container)}>
           <CardActionArea>
             <CardMedia
               component="img"
