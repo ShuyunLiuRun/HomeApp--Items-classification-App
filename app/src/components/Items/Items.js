@@ -6,7 +6,8 @@ const Items = ({ data, clickOnItem }) => {
     return (
         data === null || data === undefined || data === '' ?
             <div>You haven't record have any item in your place yet. Please click the Plus icon to add a item in your home.</div> :
-            data.map(d => <div key={d.ID} className="list-items" ><OneItem key={d.ID} data={d} clickOnItem={clickOnItem} /></div> )
+             data.map(d => <div key={d.ID} className="list-items" ><OneItem key={d.ID} data={d} clickOnItem={clickOnItem} /></div> )
+    
     )
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import Main from './components/Main.js';
 import * as Fetch from './components/DataComponent.js';
 import AddItemForm from './components/Item/AddItemForm.js';
@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route , Switch } from "react-router-dom";
 //fake data
 const fd = require('./data.json');
 
-
+const baseUrl = "http://localhost:4000/";
 
 function App() {
   const [data, setData] = useState(fd);
@@ -21,7 +21,7 @@ function App() {
 
   //the initial data
   if (init === true) {
-    Fetch.get("http://localhost:4000/").then((res) => {
+    Fetch.get(baseUrl).then((res) => {
       setIsLoading(false);
       setData(res);
       //'init' is a trigger to prevent the program from jumping into a fetch loop
@@ -40,12 +40,10 @@ function App() {
     setContainerLabel(name);
     setCurrentContainerId(ID);
 
-    var baseUrl = "http://localhost:4000/";
-    let url = baseUrl + ID;
-
-    Fetch.get(url).then((response) => {
+    Fetch.get(baseUrl+ID).then((response) => {
       if (response) {
         // no error occurred
+        console.log("Get Response"+response)
         setData(response);
         setIsLoading(false);
       }
@@ -55,30 +53,22 @@ function App() {
   //Collect new item's data from the form 
   //item_name, item_id, level, contained_by, additional_json , is_container
   const handleFormSubmit = (dataFromForm) => {
-    dataFromForm["contained_by"] = currentContainerId;
-    var jsonD = JSON.stringify(dataFromForm);
-    console.log("new item: "+ jsonD);
-    
-  };
-
-  // post the new item into database
-  const submitItem = async (name, ID,  additional_json) => {
-    //console.log(name + ID);
     setIsLoading(true);
+    //add container Id for this new item
+    dataFromForm["contained_by"] = currentContainerId;
+    console.log("new item: "+ JSON.stringify(dataFromForm));
 
-    var baseUrl = "http://localhost:4000/";
-    let url = baseUrl + ID;
-
-    Fetch.get(url).then((response) => {
+    //两件事： 1. 将新物品存到数据库
+    // 2.  跳出alert， 并且（在不刷新的前提下）回到上一级 （刷新也行？反正要记住 currentContainerId然后展列这个container中所有物品）
+    
+    Fetch.post(baseUrl+"addItem/",dataFromForm).then((response) => {
+      
       if (response) {
         // no error occurred
-        setData(response);
-        console.log(data);
+        console.log(response);
         setIsLoading(false);
       }
     });
-
-    //shou up a alert, then go back to homepage
   };
 
   //TODO: back to upper level

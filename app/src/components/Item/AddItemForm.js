@@ -1,46 +1,6 @@
 import React, { useState } from 'react';
 
-// class temp extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       item_name: "",
-
-//     };
-
-//     this.handleChange = this.handleChange.bind(this);
-//     this.handleSubmit = this.handleSubmit.bind(this);
-//   }
-
-//   handleChange(event) {
-//     this.setState({ value: event.target.value });
-//   }
-
-//   handleSubmit(event) {
-//     alert('You have added ' + this.state.value);
-//     event.preventDefault();
-//     //TODO: jump to homepage
-//   }
-
-//   render() {
-//     return (
-//       <form onSubmit={this.handleSubmit}>
-//         <label>
-//           名字:
-//             <input type="text" value={this.state.value} onChange={this.handleChange} />
-//         </label>
-//         <input type="submit" value="提交" />
-//       </form>
-//     );
-//   }
-// }
-
-// TODO: form style
-
-// gather the user input, then pass back to root component
-
-
-const AddItemForm = ({handleFormSubmit}) => {
+const AddItemForm = ({currentContainerId, handleFormSubmit}) => {
 
   const data = {
     item_name: "",
@@ -67,6 +27,7 @@ const AddItemForm = ({handleFormSubmit}) => {
 
   return (
     <form>
+      <span>{currentContainerId}</span>
       <label>
         名字:
       </label>
