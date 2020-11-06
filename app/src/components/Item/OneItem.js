@@ -22,31 +22,30 @@ const useStyles = makeStyles((theme) => ({
 // each item is wrapped in a litte square container
 var OneItem = ({ data, clickOnItem }) => {
   const classes = useStyles();
-  const { item_name, item_id, level, contained_by, additional_json , is_container} = data;
+  const { item_name, item_id, level, contained_by, additional_json, is_container } = data;
 
 
 
   return (
-
     <Card className={classes.root}>
-      {/* pass all attribute back to root, then setState*/}
-      <div className="handle-clickItem" onClick={() => clickOnItem(item_name, item_id, level, contained_by, additional_json , is_container)}>
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="100"
-              image={require("./defaultImage.png")}
-              title="click to check items"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                {item_name}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {/* Descriptions  */}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
+      {/* pass all attribute back to root, then setState*/}      
+      <div className="handle-clickItem" onClick={() => {  if(is_container) clickOnItem(item_name, item_id, level, contained_by, additional_json, is_container)}}>
+        <CardActionArea>
+          <CardMedia
+            component="img"
+            height="100"
+            image={require("./defaultImage.png")}
+            title="click to check items"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {item_name}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {/* Descriptions  */}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
 
       </div>
       <CardActions>
