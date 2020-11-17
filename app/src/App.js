@@ -1,8 +1,9 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import Main from './components/Main.js';
 import * as Fetch from './components/DataComponent.js';
 import AddItemForm from './components/Item/AddItemForm.js';
-import { BrowserRouter as Router, Route , Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ClickOnOneItem from './components/Item/ClickOnOneItem.js'
 
 //fake data
 const fd = require('./data.json');
@@ -45,6 +46,7 @@ function App() {
         // no error occurred
         console.log("Get Response"+response)
         setData(response);
+        console.log(data);
         setIsLoading(false);
       }
     });
@@ -56,13 +58,13 @@ function App() {
     setIsLoading(true);
     //add container Id for this new item
     dataFromForm["contained_by"] = currentContainerId;
-    console.log("new item: "+ JSON.stringify(dataFromForm));
+    console.log("new item: " + JSON.stringify(dataFromForm));
 
     //两件事： 1. 将新物品存到数据库
     // 2.  跳出alert， 并且（在不刷新的前提下）回到上一级 （刷新也行？反正要记住 currentContainerId然后展列这个container中所有物品）
-    
-    Fetch.post(baseUrl+"addItem/",dataFromForm).then((response) => {
-      
+
+    Fetch.post(baseUrl + "addItem/", dataFromForm).then((response) => {
+
       if (response) {
         // no error occurred
         console.log(response);
@@ -89,11 +91,18 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Main Data={data} clickOnItem={clickOnItem} currentContainer={containerLabel} isLoading={isLoading} />
+            <Main Data={data} clickOnItem={clickOnItem} isLoading={isLoading} />
+
+            {/* rebuild the structure, to use router for specific item */}
+            <Route path="/:id">
+              <ClickOnOneItem clickOnItem={clickOnItem} Data={data} containerLabel={containerLabel} isLoading={isLoading}/>
+            </Route>
+
+
           </Route>
           <Route path="/form">
             {/* use props to pass data */}
-            <AddItemForm currentContainerId={currentContainerId} handleFormSubmit={handleFormSubmit}/>
+            <AddItemForm currentContainerId={currentContainerId} handleFormSubmit={handleFormSubmit} />
           </Route>
         </Switch>
       </Router>

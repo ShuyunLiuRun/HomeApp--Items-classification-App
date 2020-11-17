@@ -15,7 +15,6 @@ const request = (url, config) => {
             // server error
             throw Error('');
         }
-        console.log(res);
         return res.json();
         /**
          * an error occured when try to post
@@ -30,7 +29,7 @@ const request = (url, config) => {
             return resJson;
         }
     }).catch((error) => {
-        console.log(error);
+        throw Error(error);
     });
 };
 
@@ -47,7 +46,6 @@ export const get = (url) => {
 
 // POST请求
 export const post = (url, data) => {
-    console.table(data);
     return fetch(url, {
         mode: 'cors',
         body: JSON.stringify(data),
@@ -60,7 +58,6 @@ export const post = (url, data) => {
             // server error
             throw Error('');
         }
-        console.log("the response after use fetch: "+res);
         return res;
     }).then((resJson) => {
         if (!resJson) {
@@ -70,6 +67,6 @@ export const post = (url, data) => {
             return resJson;
         }
     }).catch((error) => {
-        console.log(error);
+        throw Error(error);
     });
 };
