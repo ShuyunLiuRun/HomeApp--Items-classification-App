@@ -29,7 +29,7 @@ const request = (url, config) => {
             return resJson;
         }
     }).catch((error) => {
-        throw Error(error);
+        console.log(error);
     });
 };
 

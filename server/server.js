@@ -42,6 +42,17 @@ app.get('/:id', function (req, res, next) {
     });
 });
 
+//get current container info
+app.get('/containerInfo/:id', function (req, res, next) {
+    var id = req.params.id;
+    db.query(`select * from master where item_id = ${id}`, [], function (result, fields) {
+        console.log('查询结果：');
+        console.log(result);
+
+        res.end(JSON.stringify(result));
+    });
+});
+
 //add new item
 app.post('/addItem', function (req, res) {
     console.log("request body:")

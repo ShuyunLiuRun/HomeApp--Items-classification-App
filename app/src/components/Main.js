@@ -3,10 +3,10 @@ import Items from './Items/Items.js';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Main = ({ Data, clickOnItem, currentContainer, isLoading }) => {
+const Main = ({ Data, clickOnItem, goBack, currentContainer, isLoading }) => {
     const classes = useStyles();
 
     return (
@@ -100,12 +100,13 @@ const Main = ({ Data, clickOnItem, currentContainer, isLoading }) => {
                             <Toolbar>
                                 <IconButton
                                     edge="start"
-                                    className={classes.menuButton}
+                                    className={classes.headerMenuButton}
                                     color="inherit"
                                     aria-label="open drawer"
                                 >
-                                    <MenuIcon />
+                                    <ArrowBackIcon onClick={goBack} />
                                 </IconButton>
+
                                 <Typography className={classes.headerTitle} variant="h6" noWrap>
                                     {currentContainer}
                                 </Typography>

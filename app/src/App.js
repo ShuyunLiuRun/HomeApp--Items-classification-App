@@ -3,7 +3,7 @@ import Main from './components/Main.js';
 import * as Fetch from './components/DataComponent.js';
 import AddItemForm from './components/Item/AddItemForm.js';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ClickOnOneItem from './components/Item/ClickOnOneItem.js'
+
 
 //fake data
 const fd = require('./data.json');
@@ -17,11 +17,14 @@ function App() {
   const [init, setInit] = useState(true);
   const [currentContainerId, setCurrentContainerId] = useState(0);
   const [newItem, setNewItem] = useState();
-  //可能不需要level字段？
-  //const [currentLevel, setCurrentLevel] = useState(1);
 
-  //the initial data
+  //initialize the program
   if (init === true) {
+    programInit();
+  }
+
+  // the function to load the initial data
+  function programInit() {
     Fetch.get(baseUrl).then((res) => {
       setIsLoading(false);
       setData(res);
@@ -41,12 +44,10 @@ function App() {
     setContainerLabel(name);
     setCurrentContainerId(ID);
 
-    Fetch.get(baseUrl+ID).then((response) => {
+    Fetch.get(baseUrl + ID).then((response) => {
       if (response) {
         // no error occurred
-        console.log("Get Response"+response)
         setData(response);
-        console.log(data);
         setIsLoading(false);
       }
     });
@@ -64,20 +65,53 @@ function App() {
     // 2.  跳出alert， 并且（在不刷新的前提下）回到上一级 （刷新也行？反正要记住 currentContainerId然后展列这个container中所有物品）
 
     Fetch.post(baseUrl + "addItem/", dataFromForm).then((response) => {
-
       if (response) {
         // no error occurred
-        console.log(response);
         setIsLoading(false);
       }
     });
   };
 
-  //TODO: back to upper level
-  //(someone says there is a windows method to jump back)
-  // goBack() {
+  //go back
+  const goBack = () => {
+    if (currentContainerId === 1) {
+      programInit();
+      setContainerLabel(' ');
+    } else {
+      //get current container's info first
+      Fetch.get(baseUrl + "containerInfo/" + currentContainerId).then((response) => {
+        if (response) {
+          // no error occurred
+          return response[0];
+        }
+      }).then((resObj) => {
+        Fetch.get(baseUrl + "containerInfo/" + resObj.contained_by).then((response) => {
+          if (response) {
+            // no error occurred
+            console.log("1" + JSON.stringify(response[0]));
+            console.log("2" + response[0].item_id);
+            console.log("3" + response[0].item_name);
 
-  // }
+            setIsLoading(true);
+            setContainerLabel(response[0].item_name);
+            setCurrentContainerId(response[0].item_id);
+
+            return response[0].item_id;
+          }
+        }).then((id) => {
+          //refresh the page with the upper container's children
+          Fetch.get(baseUrl + id).then((response) => {
+            if (response) {
+              // no error occurred
+              console.log(response);
+              setData(response);
+              setIsLoading(false);
+            }
+          });
+        })
+      })
+    }
+  }
 
   //TODO: home button click to go to the first level
 
@@ -91,12 +125,12 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Main Data={data} clickOnItem={clickOnItem} isLoading={isLoading} />
+            <Main Data={data} clickOnItem={clickOnItem} goBack={goBack} currentContainer={containerLabel} isLoading={isLoading} />
 
             {/* rebuild the structure, to use router for specific item */}
-            <Route path="/:id">
+            {/* <Route path="/:id">
               <ClickOnOneItem clickOnItem={clickOnItem} Data={data} containerLabel={containerLabel} isLoading={isLoading}/>
-            </Route>
+            </Route> */}
 
 
           </Route>
