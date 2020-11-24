@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Main = ({ Data, clickOnItem, goBack, currentContainer, isLoading }) => {
+const Main = ({ Data, clickOnItem, goBack, deleteItem, currentContainer, isLoading }) => {
     const classes = useStyles();
 
     return (
@@ -103,8 +103,9 @@ const Main = ({ Data, clickOnItem, goBack, currentContainer, isLoading }) => {
                                     className={classes.headerMenuButton}
                                     color="inherit"
                                     aria-label="open drawer"
+                                    onClick={goBack}
                                 >
-                                    <ArrowBackIcon onClick={goBack} />
+                                    <ArrowBackIcon  />
                                 </IconButton>
 
                                 <Typography className={classes.headerTitle} variant="h6" noWrap>
@@ -130,7 +131,7 @@ const Main = ({ Data, clickOnItem, goBack, currentContainer, isLoading }) => {
                 <div className="body-contents">
                     <div className="list-items" style={itemsStyle}>
                         {/* showcase all the items */}
-                        <Items data={Data} clickOnItem={clickOnItem} />
+                        <Items data={Data} clickOnItem={clickOnItem} deleteItem={deleteItem} />
 
                         {/* this is a card used to add an item */}
                         <Link to="/form" >

@@ -14,6 +14,7 @@ app.use(function (req, res, next) {
     //add a header message to solve cors security policy access deny problem
     res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, OPTIONS");
     next();
 });
 
@@ -70,12 +71,12 @@ app.post('/addItem', function (req, res) {
     });
 });
 
-app.post('/container', function (req, res) {
-    db.query('select * from master', [], function (result, fields) {
-        var toAdd = req.body;
+// delete item
+app.delete('/deleteItem/:id', function (req, res) {
+    var id = req.params.id;
+    db.query(`DELETE from master WHERE item_id = ${id}`, [], function (result, fields) {
         console.log('查询结果：');
         console.log(result);
-
         res.end();
     });
 });

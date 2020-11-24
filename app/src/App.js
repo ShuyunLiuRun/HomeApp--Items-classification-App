@@ -16,7 +16,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [init, setInit] = useState(true);
   const [currentContainerId, setCurrentContainerId] = useState(0);
-  const [newItem, setNewItem] = useState();
 
   //initialize the program
   if (init === true) {
@@ -43,10 +42,9 @@ function App() {
     setIsLoading(true);
     setContainerLabel(name);
     setCurrentContainerId(ID);
-
+    // if this item is a container, get it's children
     Fetch.get(baseUrl + ID).then((response) => {
       if (response) {
-        // no error occurred
         setData(response);
         setIsLoading(false);
       }
@@ -54,45 +52,35 @@ function App() {
   };
 
   //Collect new item's data from the form 
-  //item_name, item_id, level, contained_by, additional_json , is_container
   const handleFormSubmit = (dataFromForm) => {
     setIsLoading(true);
     //add container Id for this new item
     dataFromForm["contained_by"] = currentContainerId;
     console.log("new item: " + JSON.stringify(dataFromForm));
-
-    //两件事： 1. 将新物品存到数据库
-    // 2.  跳出alert， 并且（在不刷新的前提下）回到上一级 （刷新也行？反正要记住 currentContainerId然后展列这个container中所有物品）
-
+    // post the info into db
     Fetch.post(baseUrl + "addItem/", dataFromForm).then((response) => {
       if (response) {
-        // no error occurred
         setIsLoading(false);
       }
     });
   };
 
-  //go back
+  //use the go back button instead of the browsers'
   const goBack = () => {
-    if (currentContainerId === 1) {
+    if (currentContainerId === 1 || containerLabel === ' ') {
       programInit();
       setContainerLabel(' ');
     } else {
       //get current container's info first
       Fetch.get(baseUrl + "containerInfo/" + currentContainerId).then((response) => {
         if (response) {
-          // no error occurred
           return response[0];
         }
       }).then((resObj) => {
         Fetch.get(baseUrl + "containerInfo/" + resObj.contained_by).then((response) => {
           if (response) {
-            // no error occurred
-            console.log("1" + JSON.stringify(response[0]));
-            console.log("2" + response[0].item_id);
-            console.log("3" + response[0].item_name);
-
             setIsLoading(true);
+            //set the label showing in the bar
             setContainerLabel(response[0].item_name);
             setCurrentContainerId(response[0].item_id);
 
@@ -102,8 +90,6 @@ function App() {
           //refresh the page with the upper container's children
           Fetch.get(baseUrl + id).then((response) => {
             if (response) {
-              // no error occurred
-              console.log(response);
               setData(response);
               setIsLoading(false);
             }
@@ -113,11 +99,27 @@ function App() {
     }
   }
 
+  //TODO: click 'submit' the form, go back to the container
+
+  //TODO: delete item
+  const deleteItem = (id)=>{
+    Fetch.de(baseUrl + "deleteItem/"+id).then((response) => {
+      if (response) {
+        Fetch.get(baseUrl + currentContainerId).then((response) => {
+          if (response) {
+            setData(response);
+            setIsLoading(false);
+          }
+        });
+      }
+    });
+  }
+
   //TODO: home button click to go to the first level
 
   //TODO: search for item
 
-
+  //TODO: functionalize the 'information' button
 
   return (
     <React.Fragment>
@@ -125,14 +127,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Main Data={data} clickOnItem={clickOnItem} goBack={goBack} currentContainer={containerLabel} isLoading={isLoading} />
-
-            {/* rebuild the structure, to use router for specific item */}
-            {/* <Route path="/:id">
-              <ClickOnOneItem clickOnItem={clickOnItem} Data={data} containerLabel={containerLabel} isLoading={isLoading}/>
-            </Route> */}
-
-
+          <Main Data={data} clickOnItem={clickOnItem} goBack={goBack} deleteItem={deleteItem} currentContainer={containerLabel} isLoading={isLoading} />
           </Route>
           <Route path="/form">
             {/* use props to pass data */}
@@ -146,10 +141,6 @@ function App() {
 
   )
 }
-
-
-
-
 
 export default App;
 
