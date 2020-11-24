@@ -9,15 +9,15 @@ const AddItemForm = ({ currentContainerId, handleFormSubmit }) => {
     is_container: false
   };
 
-  const handleNameChange = (event) => {
+  const handleName = (event) => {
     data.item_name = event.target.value;
   }
 
-  const handleAIChange = (event) => {
+  const handleAdditionalInformation = (event) => {
     data.additional_information = event.target.value;
   }
 
-  const handleICChange = (event) => {
+  const handleIsContainer = (event) => {
     data.is_container = event.target.value;
   }
 
@@ -31,17 +31,17 @@ const AddItemForm = ({ currentContainerId, handleFormSubmit }) => {
       <label>
         Add Item Name:
       </label>
-      <input name="item_name" type="text" onChange={handleNameChange} style={formStyle} />
+      <input name="item_name" type="text" onChange={handleName} style={formStyle} />
 
       <label>
         Additional Information:
       </label>
-      <textarea rows="4" cols="50" name="additional_information" onChange={handleAIChange} style={formStyle} />
+      <textarea rows="4" cols="50" name="additional_information" onChange={handleAdditionalInformation} style={formStyle} />
 
       <label>
         Is It A Container?
       </label>
-      <div onChange={handleICChange} style={formStyle}>
+      <div onChange={handleIsContainer} style={formStyle}>
         <input type="radio" value="true" name="is_container" />Yes
         <input type="radio" value="false" name="is_container" />No
       </div>

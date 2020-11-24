@@ -37,12 +37,12 @@ var OneItem = ({ data, clickOnItem ,deleteItem}) => {
     setOpen(true);
   };
 
-  const handleCloseTrue = () => {
+  const handleDialogWhenYes = () => {
     setOpen(false);
     deleteItem(item_id);
   };
 
-  const handleCloseFalse = () => {
+  const handleDialogWhenNo = () => {
     setOpen(false);
   };
 
@@ -53,7 +53,6 @@ var OneItem = ({ data, clickOnItem ,deleteItem}) => {
       </Button>
       <Dialog
         open={open}
-        // onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -64,10 +63,10 @@ var OneItem = ({ data, clickOnItem ,deleteItem}) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseTrue} color="primary">
+          <Button onClick={handleDialogWhenYes} color="primary">
             Yes
           </Button>
-          <Button onClick={handleCloseFalse} color="primary" autoFocus>
+          <Button onClick={handleDialogWhenNo} color="primary" autoFocus>
             No
           </Button>
         </DialogActions>

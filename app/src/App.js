@@ -8,7 +8,13 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 //fake data
 const fd = require('./data.json');
 
-const baseUrl = "http://localhost:4000/";
+const BaseUrl = "http://localhost:4000/";
+
+// TODO: complete the Api commanderand change the previous code
+const ApiBuilder = {
+  GetItemApi: (itemId) => { return BaseUrl + 'item/' + (!isNaN(itemId) ? itemId : ''); },
+  GetContainerApi: (containerId) => { return BaseUrl + 'container/' + (!isNaN(containerId) ? containerId : '0'); },
+}
 
 function App() {
   const [data, setData] = useState(fd);
@@ -18,13 +24,13 @@ function App() {
   const [currentContainerId, setCurrentContainerId] = useState(0);
 
   //initialize the program
-  if (init === true) {
+  if (init) {
     programInit();
   }
 
   // the function to load the initial data
   function programInit() {
-    Fetch.get(baseUrl).then((res) => {
+    Fetch.get(ApiBuilder.GetContainerApi(0)).then((res) => {
       setIsLoading(false);
       setData(res);
       //'init' is a trigger to prevent the program from jumping into a fetch loop
@@ -38,12 +44,11 @@ function App() {
   //once the user click on an item(container), 
   //get all the items stored in this item(container)
   const clickOnItem = async (name, ID, level, contained_by, additional_json, is_container) => {
-    console.log(name + ID);
     setIsLoading(true);
     setContainerLabel(name);
     setCurrentContainerId(ID);
     // if this item is a container, get it's children
-    Fetch.get(baseUrl + ID).then((response) => {
+    Fetch.get(ApiBuilder.GetContainerApi(ID)).then((response) => {
       if (response) {
         setData(response);
         setIsLoading(false);
@@ -56,9 +61,8 @@ function App() {
     setIsLoading(true);
     //add container Id for this new item
     dataFromForm["contained_by"] = currentContainerId;
-    console.log("new item: " + JSON.stringify(dataFromForm));
     // post the info into db
-    Fetch.post(baseUrl + "addItem/", dataFromForm).then((response) => {
+    Fetch.post(ApiBuilder.GetItemApi(), dataFromForm).then((response) => {
       if (response) {
         setIsLoading(false);
       }
@@ -72,12 +76,12 @@ function App() {
       setContainerLabel(' ');
     } else {
       //get current container's info first
-      Fetch.get(baseUrl + "containerInfo/" + currentContainerId).then((response) => {
+      Fetch.get(ApiBuilder.GetItemApi(currentContainerId)).then((response) => {
         if (response) {
           return response[0];
         }
       }).then((resObj) => {
-        Fetch.get(baseUrl + "containerInfo/" + resObj.contained_by).then((response) => {
+        Fetch.get(ApiBuilder.GetItemApi(resObj.contained_by)).then((response) => {
           if (response) {
             setIsLoading(true);
             //set the label showing in the bar
@@ -88,7 +92,7 @@ function App() {
           }
         }).then((id) => {
           //refresh the page with the upper container's children
-          Fetch.get(baseUrl + id).then((response) => {
+          Fetch.get(ApiBuilder.GetContainerApi(id)).then((response) => {
             if (response) {
               setData(response);
               setIsLoading(false);
@@ -102,10 +106,10 @@ function App() {
   //TODO: click 'submit' the form, go back to the container
 
   //TODO: delete item
-  const deleteItem = (id)=>{
-    Fetch.de(baseUrl + "deleteItem/"+id).then((response) => {
+  const deleteItem = (id) => {
+    Fetch.remove(ApiBuilder.GetItemApi(id)).then((response) => {
       if (response) {
-        Fetch.get(baseUrl + currentContainerId).then((response) => {
+        Fetch.get(ApiBuilder.GetContainerApi(currentContainerId)).then((response) => {
           if (response) {
             setData(response);
             setIsLoading(false);
@@ -127,7 +131,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-          <Main Data={data} clickOnItem={clickOnItem} goBack={goBack} deleteItem={deleteItem} currentContainer={containerLabel} isLoading={isLoading} />
+            <Main Data={data} clickOnItem={clickOnItem} goBack={goBack} deleteItem={deleteItem} currentContainer={containerLabel} isLoading={isLoading} />
           </Route>
           <Route path="/form">
             {/* use props to pass data */}
