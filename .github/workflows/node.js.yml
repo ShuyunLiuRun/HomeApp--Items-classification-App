@@ -24,10 +24,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: echo hello world
-    - run: echo $PWD
-    - run: echo $(ls)
-    - run: cd app
-    - run: npm install
-    - run: npm start
+    - name: Install packages
+      working-directory: ./app
+      run: npm install
+    - name: Run build
+      working-directory: ./app
+      run: npm run build
+       
       
