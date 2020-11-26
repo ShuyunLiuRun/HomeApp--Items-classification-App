@@ -26,3 +26,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: echo hello world
     - run: echo $PWD
+    - run: echo $(ls)
+      
