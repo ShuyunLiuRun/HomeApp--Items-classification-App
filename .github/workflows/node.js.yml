@@ -27,4 +27,7 @@ jobs:
     - run: echo hello world
     - run: echo $PWD
     - run: echo $(ls)
+    - run: cd app
+    - run: npm install
+    - run: npm start
       
