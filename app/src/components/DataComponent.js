@@ -1,5 +1,3 @@
-import { message } from 'antd';
-
 /**mode no-cors will make a opqque type of response, 
         *which we couldn't access the information contained in the response 
         *
@@ -16,11 +14,6 @@ const request = (url, config) => {
             throw Error('');
         }
         return res.json();
-        /**
-         * an error occured when try to post
-         * searched by error syntax, someone said it is because the server
-         * does not serving JSON
-         */
     }).then((resJson) => {
         if (!resJson) {
             // code error
@@ -29,9 +22,28 @@ const request = (url, config) => {
             return resJson;
         }
     }).catch((error) => {
-        throw Error(error);
+        console.log(error);
     });
 };
+
+// DELETE
+export const remove = (url)=>{
+    console.log(url);
+    return fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then((res) => {
+        if (!res.ok) {
+            // server error
+            throw Error('');
+        }
+        return res;
+    }).catch((error) => {
+        console.log(error);
+    })
+}; 
 
 // GET请求
 export const get = (url) => {

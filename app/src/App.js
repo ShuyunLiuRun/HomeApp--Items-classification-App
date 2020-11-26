@@ -3,12 +3,18 @@ import Main from './components/Main.js';
 import * as Fetch from './components/DataComponent.js';
 import AddItemForm from './components/Item/AddItemForm.js';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ClickOnOneItem from './components/Item/ClickOnOneItem.js'
+
 
 //fake data
 const fd = require('./data.json');
 
-const baseUrl = "http://localhost:4000/";
+const BaseUrl = "http://localhost:4000/";
+
+// TODO: complete the Api commanderand change the previous code
+const ApiBuilder = {
+  GetItemApi: (itemId) => { return BaseUrl + 'item/' + (!isNaN(itemId) ? itemId : ''); },
+  GetContainerApi: (containerId) => { return BaseUrl + 'container/' + (!isNaN(containerId) ? containerId : '0'); },
+}
 
 function App() {
   const [data, setData] = useState(fd);
@@ -16,13 +22,15 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [init, setInit] = useState(true);
   const [currentContainerId, setCurrentContainerId] = useState(0);
-  const [newItem, setNewItem] = useState();
-  //可能不需要level字段？
-  //const [currentLevel, setCurrentLevel] = useState(1);
 
-  //the initial data
-  if (init === true) {
-    Fetch.get(baseUrl).then((res) => {
+  //initialize the program
+  if (init) {
+    programInit();
+  }
+
+  // the function to load the initial data
+  function programInit() {
+    Fetch.get(ApiBuilder.GetContainerApi(0)).then((res) => {
       setIsLoading(false);
       setData(res);
       //'init' is a trigger to prevent the program from jumping into a fetch loop
@@ -36,54 +44,86 @@ function App() {
   //once the user click on an item(container), 
   //get all the items stored in this item(container)
   const clickOnItem = async (name, ID, level, contained_by, additional_json, is_container) => {
-    console.log(name + ID);
     setIsLoading(true);
     setContainerLabel(name);
     setCurrentContainerId(ID);
-
-    Fetch.get(baseUrl+ID).then((response) => {
+    // if this item is a container, get it's children
+    Fetch.get(ApiBuilder.GetContainerApi(ID)).then((response) => {
       if (response) {
-        // no error occurred
-        console.log("Get Response"+response)
         setData(response);
-        console.log(data);
         setIsLoading(false);
       }
     });
   };
 
   //Collect new item's data from the form 
-  //item_name, item_id, level, contained_by, additional_json , is_container
   const handleFormSubmit = (dataFromForm) => {
     setIsLoading(true);
     //add container Id for this new item
     dataFromForm["contained_by"] = currentContainerId;
-    console.log("new item: " + JSON.stringify(dataFromForm));
-
-    //两件事： 1. 将新物品存到数据库
-    // 2.  跳出alert， 并且（在不刷新的前提下）回到上一级 （刷新也行？反正要记住 currentContainerId然后展列这个container中所有物品）
-
-    Fetch.post(baseUrl + "addItem/", dataFromForm).then((response) => {
-
+    // post the info into db
+    Fetch.post(ApiBuilder.GetItemApi(), dataFromForm).then((response) => {
       if (response) {
-        // no error occurred
-        console.log(response);
         setIsLoading(false);
       }
     });
   };
 
-  //TODO: back to upper level
-  //(someone says there is a windows method to jump back)
-  // goBack() {
+  //use the go back button instead of the browsers'
+  const goBack = () => {
+    if (currentContainerId === 1 || containerLabel === ' ') {
+      programInit();
+      setContainerLabel(' ');
+    } else {
+      //get current container's info first
+      Fetch.get(ApiBuilder.GetItemApi(currentContainerId)).then((response) => {
+        if (response) {
+          return response[0];
+        }
+      }).then((resObj) => {
+        Fetch.get(ApiBuilder.GetItemApi(resObj.contained_by)).then((response) => {
+          if (response) {
+            setIsLoading(true);
+            //set the label showing in the bar
+            setContainerLabel(response[0].item_name);
+            setCurrentContainerId(response[0].item_id);
 
-  // }
+            return response[0].item_id;
+          }
+        }).then((id) => {
+          //refresh the page with the upper container's children
+          Fetch.get(ApiBuilder.GetContainerApi(id)).then((response) => {
+            if (response) {
+              setData(response);
+              setIsLoading(false);
+            }
+          });
+        })
+      })
+    }
+  }
+
+  //TODO: click 'submit' the form, go back to the container
+
+  //TODO: delete item
+  const deleteItem = (id) => {
+    Fetch.remove(ApiBuilder.GetItemApi(id)).then((response) => {
+      if (response) {
+        Fetch.get(ApiBuilder.GetContainerApi(currentContainerId)).then((response) => {
+          if (response) {
+            setData(response);
+            setIsLoading(false);
+          }
+        });
+      }
+    });
+  }
 
   //TODO: home button click to go to the first level
 
   //TODO: search for item
 
-
+  //TODO: functionalize the 'information' button
 
   return (
     <React.Fragment>
@@ -91,14 +131,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Main Data={data} clickOnItem={clickOnItem} isLoading={isLoading} />
-
-            {/* rebuild the structure, to use router for specific item */}
-            <Route path="/:id">
-              <ClickOnOneItem clickOnItem={clickOnItem} Data={data} containerLabel={containerLabel} isLoading={isLoading}/>
-            </Route>
-
-
+            <Main Data={data} clickOnItem={clickOnItem} goBack={goBack} deleteItem={deleteItem} currentContainer={containerLabel} isLoading={isLoading} />
           </Route>
           <Route path="/form">
             {/* use props to pass data */}
@@ -112,10 +145,6 @@ function App() {
 
   )
 }
-
-
-
-
 
 export default App;
 
