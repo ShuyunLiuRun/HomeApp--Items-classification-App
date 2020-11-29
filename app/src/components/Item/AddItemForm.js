@@ -22,8 +22,7 @@ const AddItemForm = ({ currentContainerId, handleFormSubmit }) => {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    handleFormSubmit(data)
+    handleFormSubmit(data);
   }
 
   return (
@@ -31,12 +30,21 @@ const AddItemForm = ({ currentContainerId, handleFormSubmit }) => {
       <label>
         Add Item Name:
       </label>
-      <input name="item_name" type="text" onChange={handleName} style={formStyle} />
+      <input
+        name="item_name"
+        type="text"
+        onChange={handleName}
+        style={formStyle} />
 
       <label>
         Additional Information:
       </label>
-      <textarea rows="4" cols="50" name="additional_information" onChange={handleAdditionalInformation} style={formStyle} />
+      <textarea
+        rows="4"
+        cols="50"
+        name="additional_information"
+        onChange={handleAdditionalInformation}
+        style={formStyle} />
 
       <label>
         Is It A Container?
@@ -45,8 +53,10 @@ const AddItemForm = ({ currentContainerId, handleFormSubmit }) => {
         <input type="radio" value="true" name="is_container" />Yes
         <input type="radio" value="false" name="is_container" />No
       </div>
-      <Link to="/" >
-        <button onClick={handleSubmit} style={formStyle}>Submit</button>
+      <Link to="/" className="submitBtn">
+        <button onClick={handleSubmit} style={formStyle} className="submitBtn">
+          Submit
+        </button>
       </Link>
     </form>
   );

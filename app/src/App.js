@@ -64,9 +64,16 @@ function App() {
     // post the info into db
     Fetch.post(ApiBuilder.GetItemApi(), dataFromForm).then((response) => {
       if (response) {
+        Fetch.get(ApiBuilder.GetContainerApi(currentContainerId)).then((response) =>{
+          if (response) {
+            setData(response);
+            //setIsLoading(false);
+          }
+        });
         setIsLoading(false);
-      }
+      };
     });
+    
   };
 
   //use the go back button instead of the browsers'
@@ -103,12 +110,11 @@ function App() {
     }
   }
 
-  //TODO: click 'submit' the form, go back to the container
-
-  //TODO: delete item
+  //delete item
   const deleteItem = (id) => {
     Fetch.remove(ApiBuilder.GetItemApi(id)).then((response) => {
       if (response) {
+        //refresh the page by loading current items after one item been deleted
         Fetch.get(ApiBuilder.GetContainerApi(currentContainerId)).then((response) => {
           if (response) {
             setData(response);

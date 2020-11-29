@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-//get specific item's data
+//get all children from a container by id
 app.get('/container/:id', function (req, res, next) {
     var id = req.params.id;
     db.query(`select * from master where contained_by = ${id}`, [], function (result, fields) {
