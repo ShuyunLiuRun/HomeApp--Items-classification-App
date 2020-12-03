@@ -28,7 +28,6 @@ const request = (url, config) => {
 
 // DELETE
 export const remove = (url)=>{
-    console.log(url);
     return fetch(url, {
         method: 'DELETE',
         headers: {

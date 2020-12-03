@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Items from './Items/Items.js';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,6 +13,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from "react-router-dom";
+import HomeIcon from '@material-ui/icons/Home';
 
 const useStyles = makeStyles((theme) => ({
     progressRoot: {
@@ -84,8 +85,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Main = ({ Data, clickOnItem, goBack, deleteItem, currentContainer, isLoading }) => {
+const Main = ({ Data, clickOnItem, goBack, goHome, deleteItem, handleSearch, currentContainer, isLoading }) => {
     const classes = useStyles();
+    const [search, setSearch] = useState(null);
+    const handleSearchChange = (event)=>{
+        setSearch(event.target.value);
+    }
+
+    const handleKeyDown = (e)=>{
+        if(e.keyCode === 13){
+            handleSearch(search);
+        }
+    }
 
     return (
         isLoading ?
@@ -102,7 +113,7 @@ const Main = ({ Data, clickOnItem, goBack, deleteItem, currentContainer, isLoadi
                                     edge="start"
                                     className={classes.headerMenuButton}
                                     color="inherit"
-                                    aria-label="open drawer"
+                                    aria-label="go back"
                                     onClick={goBack}
                                 >
                                     <ArrowBackIcon  />
@@ -111,12 +122,24 @@ const Main = ({ Data, clickOnItem, goBack, deleteItem, currentContainer, isLoadi
                                 <Typography className={classes.headerTitle} variant="h6" noWrap>
                                     {currentContainer}
                                 </Typography>
+
+                                <IconButton
+                                    edge="start"
+                                    className={classes.headerMenuButton}
+                                    color="inherit"
+                                    aria-label="go to home"
+                                    onClick={goHome}
+                                >
+                                    <HomeIcon  />
+                                </IconButton>
                                 <div className={classes.headerSearch}>
                                     <div className={classes.headerSearchIcon}>
                                         <SearchIcon />
                                     </div>
                                     <InputBase
                                         placeholder="Search…"
+                                        onChange={handleSearchChange}
+                                        onKeyDown={handleKeyDown}
                                         classes={{
                                             root: classes.headerInputRoot,
                                             input: classes.headerInputInput,

@@ -3,26 +3,36 @@ import { Link } from "react-router-dom";
 
 const AddItemForm = ({ currentContainerId, handleFormSubmit }) => {
 
-  const data = {
+  const form = {
     item_name: "",
     additional_information: "",
-    is_container: false
+    is_container: true
   };
 
+  const requiredFields = [
+    'item_name',
+  ];
+
   const handleName = (event) => {
-    data.item_name = event.target.value;
+    form.item_name = event.target.value;
   }
 
   const handleAdditionalInformation = (event) => {
-    data.additional_information = event.target.value;
+    form.additional_information = event.target.value;
   }
 
   const handleIsContainer = (event) => {
-    data.is_container = event.target.value;
+    form.is_container = event.target.value;
   }
 
   const handleSubmit = (e) => {
-    handleFormSubmit(data);
+    //e.preventDefault();      can't add. otherwise it cannot redirect when click on submit btn
+    formValidation(form) ?
+      handleFormSubmit(form) : alert("Please input item's name.")
+  }
+
+  const formValidation = (form) => {
+    return  requiredFields.map((s) => form[s] ? true : false).indexOf(false) === -1;
   }
 
   return (
@@ -54,6 +64,7 @@ const AddItemForm = ({ currentContainerId, handleFormSubmit }) => {
         <input type="radio" value="false" name="is_container" />No
       </div>
       <Link to="/" className="submitBtn">
+
         <button onClick={handleSubmit} style={formStyle} className="submitBtn">
           Submit
         </button>

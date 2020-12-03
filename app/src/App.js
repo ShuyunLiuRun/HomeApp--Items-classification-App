@@ -3,6 +3,7 @@ import Main from './components/Main.js';
 import * as Fetch from './components/DataComponent.js';
 import AddItemForm from './components/Item/AddItemForm.js';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import './style.css';
 
 
 //fake data
@@ -13,6 +14,7 @@ const BaseUrl = "http://localhost:4000/";
 // TODO: complete the Api commanderand change the previous code
 const ApiBuilder = {
   GetItemApi: (itemId) => { return BaseUrl + 'item/' + (!isNaN(itemId) ? itemId : ''); },
+  SearchItemByNameAndContainerIdApi: (itemName, id) => { return BaseUrl + 'search/?item_name=' + itemName + '&containerId=' + id },
   GetContainerApi: (containerId) => { return BaseUrl + 'container/' + (!isNaN(containerId) ? containerId : '0'); },
 }
 
@@ -31,8 +33,7 @@ function App() {
   // the function to load the initial data
   function programInit() {
     Fetch.get(ApiBuilder.GetContainerApi(0)).then((res) => {
-      setIsLoading(false);
-      setData(res);
+      handleGetResponse(res);
       //'init' is a trigger to prevent the program from jumping into a fetch loop
       setInit(false);
     }).catch((error) => {
@@ -49,63 +50,66 @@ function App() {
     setCurrentContainerId(ID);
     // if this item is a container, get it's children
     Fetch.get(ApiBuilder.GetContainerApi(ID)).then((response) => {
-      if (response) {
-        setData(response);
-        setIsLoading(false);
-      }
+      handleGetResponse(response);
     });
   };
 
   //Collect new item's data from the form 
   const handleFormSubmit = (dataFromForm) => {
     setIsLoading(true);
-    //add container Id for this new item
+    //add container info for this new item
     dataFromForm["contained_by"] = currentContainerId;
+    dataFromForm["container_name"] = containerLabel;
     // post the info into db
     Fetch.post(ApiBuilder.GetItemApi(), dataFromForm).then((response) => {
       if (response) {
-        Fetch.get(ApiBuilder.GetContainerApi(currentContainerId)).then((response) =>{
-          if (response) {
-            setData(response);
-            //setIsLoading(false);
-          }
+        Fetch.get(ApiBuilder.GetContainerApi(currentContainerId)).then((response) => {
+          handleGetResponse(response);
         });
-        setIsLoading(false);
       };
     });
-    
   };
 
   //use the go back button instead of the browsers'
   const goBack = () => {
-    if (currentContainerId === 1 || containerLabel === ' ') {
+    if (currentContainerId === 1 || currentContainerId === 0 || containerLabel === ' ') {
       programInit();
       setContainerLabel(' ');
     } else {
       //get current container's info first
       Fetch.get(ApiBuilder.GetItemApi(currentContainerId)).then((response) => {
         if (response) {
-          return response[0];
+            return response[0];
         }
       }).then((resObj) => {
-        Fetch.get(ApiBuilder.GetItemApi(resObj.contained_by)).then((response) => {
-          if (response) {
-            setIsLoading(true);
-            //set the label showing in the bar
-            setContainerLabel(response[0].item_name);
-            setCurrentContainerId(response[0].item_id);
-
-            return response[0].item_id;
-          }
-        }).then((id) => {
-          //refresh the page with the upper container's children
-          Fetch.get(ApiBuilder.GetContainerApi(id)).then((response) => {
-            if (response) {
-              setData(response);
-              setIsLoading(false);
+        if (resObj.contained_by === 0) {
+          programInit();
+          setContainerLabel(' ');
+        } else {
+          Fetch.get(ApiBuilder.GetItemApi(resObj.contained_by)).then((response) => {
+            if (response.length !== 0) {
+              //set the label showing in the bar
+              console.log(response[0].item_name);
+              console.log(response[0].item_id);
+              setContainerLabel(response[0].item_name);
+              setCurrentContainerId(response[0].item_id);
+              return response[0].item_id;
+            } else {
+              return 0;
             }
-          });
-        })
+          }).then((id) => {
+            if (id !== 0) {
+              Fetch.get(ApiBuilder.GetContainerApi(id)).then((response) => {
+                handleGetResponse(response);
+              });
+            } else {
+              programInit();
+            }
+            //refresh the page with the upper container's children
+  
+          })
+        }
+ 
       })
     }
   }
@@ -116,28 +120,45 @@ function App() {
       if (response) {
         //refresh the page by loading current items after one item been deleted
         Fetch.get(ApiBuilder.GetContainerApi(currentContainerId)).then((response) => {
-          if (response) {
-            setData(response);
-            setIsLoading(false);
-          }
+          handleGetResponse(response);
         });
       }
     });
   }
 
-  //TODO: home button click to go to the first level
+  //search for item
+  const handleSearch = (searchContent) => {
+    if (!searchContent.trim()) {
+      Fetch.get(ApiBuilder.GetContainerApi(currentContainerId)).then((response) => {
+        handleGetResponse(response);
+      });
+    } else {
+      Fetch.get(ApiBuilder.SearchItemByNameAndContainerIdApi(searchContent, currentContainerId)).then((response) => {
+        handleGetResponse(response);
+      });
+    }
+  }
 
-  //TODO: search for item
+  // reduce the repeat code
+  const handleGetResponse = (response) => {
+    if (response) {
+      setData(response);
+      setIsLoading(false);
+    }
+  }
 
-  //TODO: functionalize the 'information' button
-
+  // a home button click to go to the first level
+  const goHome = () => {
+    setContainerLabel('');
+    setCurrentContainerId(0);
+    programInit();
+  }
   return (
     <React.Fragment>
-
       <Router>
         <Switch>
           <Route exact path="/">
-            <Main Data={data} clickOnItem={clickOnItem} goBack={goBack} deleteItem={deleteItem} currentContainer={containerLabel} isLoading={isLoading} />
+            <Main Data={data} clickOnItem={clickOnItem} goBack={goBack} goHome={goHome} deleteItem={deleteItem} handleSearch={handleSearch} currentContainer={containerLabel} isLoading={isLoading} />
           </Route>
           <Route path="/form">
             {/* use props to pass data */}
@@ -145,8 +166,6 @@ function App() {
           </Route>
         </Switch>
       </Router>
-
-
     </React.Fragment>
 
   )

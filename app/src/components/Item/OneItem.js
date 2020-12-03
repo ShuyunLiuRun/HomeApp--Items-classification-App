@@ -13,6 +13,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Popover from '@material-ui/core/Popover';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,27 +25,43 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
+  typography: {
+    padding: theme.spacing(2),
+  },
 }));
 // each item is wrapped in a litte square 
-var OneItem = ({ data, clickOnItem ,deleteItem}) => {
+var OneItem = ({ data, clickOnItem, deleteItem }) => {
   const classes = useStyles();
-  const { item_name, item_id, level, contained_by, additional_json, is_container } = data;
-
+  const { item_name, item_id, contained_by, level, container_name, additional_json, is_container } = data;
+  // for information btn
+  const [anchorEl, setAnchorEl] = React.useState(null);
   //set a state to record status of the dialog
-  const [open, setOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setDialogOpen(true);
   };
 
   const handleDialogWhenYes = () => {
-    setOpen(false);
+    setDialogOpen(false);
     deleteItem(item_id);
   };
 
   const handleDialogWhenNo = () => {
-    setOpen(false);
+    setDialogOpen(false);
   };
+
+  //handle the click on 'information' btn
+  const handleInfoBtnClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  }
+
+  const handleInfoBtnClose = () => {
+    setAnchorEl(null);
+  }
+
+  const popOpen = Boolean(anchorEl);
+  const id = popOpen ? 'simple-popover' : undefined;
 
   return (
     <Card className={classes.root}>
@@ -52,7 +69,7 @@ var OneItem = ({ data, clickOnItem ,deleteItem}) => {
         <DeleteForeverIcon />
       </Button>
       <Dialog
-        open={open}
+        open={dialogOpen}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -94,7 +111,31 @@ var OneItem = ({ data, clickOnItem ,deleteItem}) => {
 
       <CardActions>
         <div className="button">
-          <Button size="small" >Information</Button>
+          <Button
+            size="small"
+            aria-describedby={id}
+            onClick={handleInfoBtnClick}>
+            Information
+          </Button>
+          <Popover
+            id={id}
+            open={popOpen}
+            anchorEl={anchorEl}
+            onClose={handleInfoBtnClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+          >
+            <Typography className={classes.typography}>
+              {(container_name === ' '|| container_name === null)  ?  "" : `Contained by: ${container_name}`} <br />
+              Description: {additional_json === ' '|| additional_json === '' || additional_json === null ? "none" : additional_json}
+            </Typography>
+          </Popover>
         </div>
       </CardActions>
     </Card>

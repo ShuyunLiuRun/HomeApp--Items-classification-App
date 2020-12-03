@@ -28,7 +28,6 @@ app.get('/container/:id', function (req, res, next) {
     db.query(`select * from master where contained_by = ${id}`, [], function (result, fields) {
         console.log('查询结果：');
         console.log(result);
-
         res.end(JSON.stringify(result));
     });
 });
@@ -39,7 +38,6 @@ app.get('/item/:id', function (req, res, next) {
     db.query(`select * from master where item_id = ${id}`, [], function (result, fields) {
         console.log('查询结果：');
         console.log(result);
-
         res.end(JSON.stringify(result));
     });
 });
@@ -52,14 +50,14 @@ app.post('/item', function (req, res) {
     var additionalInfo = req.body.additional_information;
     var isContainer = req.body.is_container === 'true' ? 1 : 0;
     var containerId = parseInt(req.body.contained_by);
+    var containerName = req.body.container_name;
     db.query("INSERT INTO master " +
-        "(item_name, contained_by, is_container, additional_json) " +
-        "VALUES (?,?,?,?);",
-        [name, containerId, isContainer, additionalInfo],
+        "(item_name, contained_by, is_container, container_name, additional_json) " +
+        "VALUES (?,?,?,?,?);",
+        [name, containerId, isContainer, containerName, additionalInfo],
         function (result, fields) {
             console.log('查询Added Item：');
             console.log(result);
-
             res.end(JSON.stringify(result));
         });
 });
@@ -72,6 +70,17 @@ app.delete('/item/:id', function (req, res) {
         console.log('查询结果：');
         console.log(result);
         res.end();
+    });
+});
+
+// search for items by name
+app.get('/search', function (req, res, next) {
+    var name = req.query.item_name;
+    var id = req.query.containerId;
+    db.query(`select * from master where contained_by = ${id} AND item_name REGEXP '.*${name}.*'`, [], function (result, fields) {
+        console.log('查询结果：');
+        console.log(result);
+        res.end(JSON.stringify(result));
     });
 });
 
