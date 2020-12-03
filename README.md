@@ -1,4 +1,4 @@
-Version 1 is ready to go!
+Some new functions updated! Please refer to the gif below:
 
 ## Show items
 ![](homeapp-showitems.gif)
