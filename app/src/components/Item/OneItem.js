@@ -89,15 +89,23 @@ var OneItem = ({ data, clickOnItem, deleteItem }) => {
         </DialogActions>
       </Dialog>
 
-      <div className="handle-clickItem" onClick={() => { if (is_container) clickOnItem(item_name, item_id, level, contained_by, additional_json, is_container) }}>
+      <div className="handle-clickItem" >
         <CardActionArea>
-          <CardMedia
-            component="img"
-            height="100"
-            image={require("./defaultImage.png")}
-            title="click to check items"
-          />
-          <CardContent>
+          <div className="upload-img">
+            <label>
+              <CardMedia
+                component="img"
+                height="100"
+                image={require("./defaultImage.png")}
+                title="click to check items"
+              />
+            </label>
+            <input type='file' onChange={console.log("click on upload img")} />
+          </div>
+
+        </CardActionArea>
+        <CardActionArea>
+          <CardContent onClick={() => { if (is_container) clickOnItem(item_name, item_id, level, contained_by, additional_json, is_container) }}>
             <Typography gutterBottom variant="h5" component="h2">
               {item_name}
             </Typography>
@@ -132,8 +140,8 @@ var OneItem = ({ data, clickOnItem, deleteItem }) => {
             }}
           >
             <Typography className={classes.typography}>
-              {(container_name === ' '|| container_name === null)  ?  "" : `Contained by: ${container_name}`} <br />
-              Description: {additional_json === ' '|| additional_json === '' || additional_json === null ? "none" : additional_json}
+              {(container_name === ' ' || container_name === null) ? "" : `Contained by: ${container_name}`} <br />
+              Description: {additional_json === ' ' || additional_json === '' || additional_json === null ? "none" : additional_json}
             </Typography>
           </Popover>
         </div>

@@ -153,6 +153,11 @@ function App() {
     setCurrentContainerId(0);
     programInit();
   }
+
+  // upload image for item
+  
+
+
   return (
     <React.Fragment>
       <Router>
